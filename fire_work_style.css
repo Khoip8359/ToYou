@@ -2,15 +2,133 @@ html, body {
   margin: 0;
   padding: 0;
   font-family: arial;
-    background-color: BLACK;
+  background-color: BLACK;
+  min-height: 200vh;
 }
 
 canvas {
   display: block;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1;
 }
 
 H1 {
   color: white;
   text-align: center;
-  font-size: 500%;
+  font-size: clamp(2rem, 8vw, 500%);
+  position: relative;
+  z-index: 2;
+  padding-top: 35vh;
+  margin: 0;
+  transition: opacity 1.2s ease, transform 1.2s ease;
+  pointer-events: none;
+}
+
+H1.fade-out {
+  opacity: 0;
+  transform: translateY(-30px);
+}
+
+.memory-carousel {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 1.8s ease;
+  perspective: 1400px;
+}
+
+.memory-carousel.visible {
+  opacity: 1;
+}
+
+.carousel-track {
+  position: relative;
+  width: min(90vw, 420px);
+  height: min(70vh, 520px);
+  transform-style: preserve-3d;
+}
+
+.carousel-slide {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: min(72vw, 280px);
+  height: min(58vh, 380px);
+  margin-left: calc(min(72vw, 280px) / -2);
+  margin-top: calc(min(58vh, 380px) / -2);
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.65);
+  border: 3px solid rgba(255, 255, 255, 0.35);
+  opacity: 0;
+  transform: translateX(0) scale(0.6);
+  transition:
+    transform 0.85s cubic-bezier(0.33, 1, 0.68, 1),
+    opacity 0.85s ease,
+    filter 0.85s ease;
+  filter: blur(4px);
+}
+
+.carousel-slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.carousel-slide.revealed {
+  opacity: 0.35;
+}
+
+.carousel-slide.pos-center {
+  transform: translateX(0) translateZ(80px) scale(1);
+  opacity: 1;
+  filter: blur(0);
+  z-index: 5;
+  border-color: rgba(255, 255, 255, 0.85);
+  box-shadow: 0 28px 70px rgba(0, 0, 0, 0.75);
+}
+
+.carousel-slide.pos-left-1 {
+  transform: translateX(-58%) translateZ(20px) rotateY(22deg) scale(0.88);
+  opacity: 0.82;
+  filter: blur(0.5px);
+  z-index: 4;
+}
+
+.carousel-slide.pos-left-2 {
+  transform: translateX(-98%) translateZ(-40px) rotateY(32deg) scale(0.74);
+  opacity: 0.55;
+  filter: blur(1.5px);
+  z-index: 3;
+}
+
+.carousel-slide.pos-right-1 {
+  transform: translateX(58%) translateZ(20px) rotateY(-22deg) scale(0.88);
+  opacity: 0.82;
+  filter: blur(0.5px);
+  z-index: 4;
+}
+
+.carousel-slide.pos-right-2 {
+  transform: translateX(98%) translateZ(-40px) rotateY(-32deg) scale(0.74);
+  opacity: 0.55;
+  filter: blur(1.5px);
+  z-index: 3;
+}
+
+.carousel-slide.pos-hidden-left,
+.carousel-slide.pos-hidden-right {
+  transform: translateX(0) scale(0.5);
+  opacity: 0;
+  filter: blur(6px);
+  z-index: 1;
+  pointer-events: none;
 }
