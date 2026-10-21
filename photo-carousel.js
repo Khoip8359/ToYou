@@ -12,11 +12,21 @@
     'f442bac7ade02dbe74f1.jpg',
   ];
 
-  const BASE = 'our_images/';
+  const BASE = new URL('our_images/', window.location.href).href;
   let currentIndex = 0;
   let slides = [];
   let started = false;
-  let autoplayId = null;
+
+  function imageUrl(file) {
+    return BASE + encodeURIComponent(file);
+  }
+
+  function preloadImages() {
+    IMAGE_FILES.forEach(function (file) {
+      const img = new Image();
+      img.src = imageUrl(file);
+    });
+  }
 
   function buildCarousel() {
     const root = document.getElementById('memory-carousel');
@@ -26,16 +36,16 @@
     track.className = 'carousel-track';
     track.setAttribute('role', 'list');
 
-    IMAGE_FILES.forEach((file, i) => {
+    IMAGE_FILES.forEach(function (file, i) {
       const slide = document.createElement('div');
       slide.className = 'carousel-slide';
       slide.setAttribute('role', 'listitem');
       slide.dataset.index = String(i);
 
       const img = document.createElement('img');
-      img.src = BASE + encodeURI(file);
+      img.src = imageUrl(file);
       img.alt = 'Kỷ niệm ' + (i + 1);
-      img.loading = 'lazy';
+      img.decoding = 'async';
       slide.appendChild(img);
       track.appendChild(slide);
       slides.push(slide);
@@ -54,9 +64,11 @@
   }
 
   function layoutSlides() {
-    slides.forEach((slide, i) => {
+    slides.forEach(function (slide, i) {
       const d = offsetForSlide(i);
-      slide.className = 'carousel-slide revealed';
+      const isRevealed = slide.classList.contains('revealed');
+      slide.className = 'carousel-slide';
+      if (isRevealed) slide.classList.add('revealed');
 
       if (d === 0) slide.classList.add('pos-center');
       else if (d === -1) slide.classList.add('pos-left-1');
@@ -74,12 +86,11 @@
   }
 
   function revealStaggered() {
-    slides.forEach((slide, i) => {
-      slide.classList.remove('revealed');
-      setTimeout(function () {
+    slides.forEach(function (slide, i) {
+      window.setTimeout(function () {
         slide.classList.add('revealed');
         layoutSlides();
-      }, 400 + i * 450);
+      }, 350 + i * 420);
     });
   }
 
@@ -95,19 +106,18 @@
     if (heading) heading.classList.add('fade-out');
 
     revealStaggered();
-
-    autoplayId = window.setInterval(nextSlide, 3800);
+    window.setInterval(nextSlide, 3800);
   }
 
   function maybeStart() {
     if (started) return;
-    const scrolled = window.scrollY > window.innerHeight * 0.15;
-    if (scrolled) startCarousel();
+    if (window.scrollY > window.innerHeight * 0.15) startCarousel();
   }
 
   window.showMemoryCarousel = startCarousel;
 
   document.addEventListener('DOMContentLoaded', function () {
+    preloadImages();
     buildCarousel();
     window.addEventListener('scroll', maybeStart, { passive: true });
     window.setTimeout(startCarousel, 2500);

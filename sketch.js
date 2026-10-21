@@ -6,11 +6,17 @@ const fireworks = [];
 let gravity;
 
 function setup() {
-  createCanvas(windowWidth, windowHeight);
+  const canvas = createCanvas(windowWidth, windowHeight);
+  canvas.style('mix-blend-mode', 'screen');
   colorMode(HSB);
   gravity = createVector(0, 0.2);
   stroke(255);
   strokeWeight(4);
+  background(0);
+}
+
+function windowResized() {
+  resizeCanvas(windowWidth, windowHeight);
   background(0);
 }
 

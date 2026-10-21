@@ -2,7 +2,7 @@ html, body {
   margin: 0;
   padding: 0;
   font-family: arial;
-  background-color: BLACK;
+  background-color: #000;
   min-height: 200vh;
 }
 
@@ -11,7 +11,10 @@ canvas {
   position: fixed;
   top: 0;
   left: 0;
-  z-index: 1;
+  z-index: 5;
+  background: transparent;
+  mix-blend-mode: screen;
+  pointer-events: none;
 }
 
 H1 {
@@ -19,7 +22,7 @@ H1 {
   text-align: center;
   font-size: clamp(2rem, 8vw, 500%);
   position: relative;
-  z-index: 2;
+  z-index: 6;
   padding-top: 35vh;
   margin: 0;
   transition: opacity 1.2s ease, transform 1.2s ease;
@@ -34,14 +37,13 @@ H1.fade-out {
 .memory-carousel {
   position: fixed;
   inset: 0;
-  z-index: 10;
+  z-index: 1;
   display: flex;
   align-items: center;
   justify-content: center;
   pointer-events: none;
   opacity: 0;
   transition: opacity 1.8s ease;
-  perspective: 1400px;
 }
 
 .memory-carousel.visible {
@@ -50,30 +52,28 @@ H1.fade-out {
 
 .carousel-track {
   position: relative;
-  width: min(90vw, 420px);
-  height: min(70vh, 520px);
-  transform-style: preserve-3d;
+  width: min(70vw, 260px);
+  height: min(48vh, 320px);
 }
 
 .carousel-slide {
   position: absolute;
   left: 50%;
   top: 50%;
-  width: min(72vw, 280px);
-  height: min(58vh, 380px);
-  margin-left: calc(min(72vw, 280px) / -2);
-  margin-top: calc(min(58vh, 380px) / -2);
-  border-radius: 14px;
+  width: 150px;
+  height: 200px;
+  margin-left: -75px;
+  margin-top: -100px;
+  border-radius: 10px;
   overflow: hidden;
-  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.65);
-  border: 3px solid rgba(255, 255, 255, 0.35);
+  background: #1a1a1a;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.45);
+  border: 2px solid rgba(255, 255, 255, 0.4);
   opacity: 0;
-  transform: translateX(0) scale(0.6);
+  transform: translateX(0) scale(0.7);
   transition:
     transform 0.85s cubic-bezier(0.33, 1, 0.68, 1),
-    opacity 0.85s ease,
-    filter 0.85s ease;
-  filter: blur(4px);
+    opacity 0.85s ease;
 }
 
 .carousel-slide img {
@@ -83,52 +83,50 @@ H1.fade-out {
   display: block;
 }
 
-.carousel-slide.revealed {
-  opacity: 0.35;
-}
-
-.carousel-slide.pos-center {
-  transform: translateX(0) translateZ(80px) scale(1);
-  opacity: 1;
-  filter: blur(0);
+.carousel-slide.revealed.pos-center {
+  transform: translateX(0) scale(1);
+  opacity: 0.92;
   z-index: 5;
-  border-color: rgba(255, 255, 255, 0.85);
-  box-shadow: 0 28px 70px rgba(0, 0, 0, 0.75);
+  border-color: rgba(255, 255, 255, 0.8);
 }
 
-.carousel-slide.pos-left-1 {
-  transform: translateX(-58%) translateZ(20px) rotateY(22deg) scale(0.88);
-  opacity: 0.82;
-  filter: blur(0.5px);
+.carousel-slide.revealed.pos-left-1 {
+  transform: translateX(-72%) scale(0.82);
+  opacity: 0.7;
   z-index: 4;
 }
 
-.carousel-slide.pos-left-2 {
-  transform: translateX(-98%) translateZ(-40px) rotateY(32deg) scale(0.74);
-  opacity: 0.55;
-  filter: blur(1.5px);
+.carousel-slide.revealed.pos-left-2 {
+  transform: translateX(-128%) scale(0.68);
+  opacity: 0.42;
   z-index: 3;
 }
 
-.carousel-slide.pos-right-1 {
-  transform: translateX(58%) translateZ(20px) rotateY(-22deg) scale(0.88);
-  opacity: 0.82;
-  filter: blur(0.5px);
+.carousel-slide.revealed.pos-right-1 {
+  transform: translateX(72%) scale(0.82);
+  opacity: 0.7;
   z-index: 4;
 }
 
-.carousel-slide.pos-right-2 {
-  transform: translateX(98%) translateZ(-40px) rotateY(-32deg) scale(0.74);
-  opacity: 0.55;
-  filter: blur(1.5px);
+.carousel-slide.revealed.pos-right-2 {
+  transform: translateX(128%) scale(0.68);
+  opacity: 0.42;
   z-index: 3;
 }
 
 .carousel-slide.pos-hidden-left,
-.carousel-slide.pos-hidden-right {
-  transform: translateX(0) scale(0.5);
+.carousel-slide.pos-hidden-right,
+.carousel-slide:not(.revealed) {
+  transform: translateX(0) scale(0.55);
   opacity: 0;
-  filter: blur(6px);
   z-index: 1;
-  pointer-events: none;
+}
+
+@media (max-width: 520px) {
+  .carousel-slide {
+    width: 120px;
+    height: 160px;
+    margin-left: -60px;
+    margin-top: -80px;
+  }
 }
