@@ -71,9 +71,7 @@ H1.fade-out {
   border: 2px solid rgba(255, 255, 255, 0.4);
   opacity: 0;
   transform: translateX(0) scale(0.7);
-  transition:
-    transform 0.85s cubic-bezier(0.33, 1, 0.68, 1),
-    opacity 0.85s ease;
+  will-change: transform, opacity;
 }
 
 .carousel-slide img {
@@ -83,43 +81,8 @@ H1.fade-out {
   display: block;
 }
 
-.carousel-slide.revealed.pos-center {
-  transform: translateX(0) scale(1);
-  opacity: 0.92;
-  z-index: 5;
-  border-color: rgba(255, 255, 255, 0.8);
-}
-
-.carousel-slide.revealed.pos-left-1 {
-  transform: translateX(-72%) scale(0.82);
-  opacity: 0.7;
-  z-index: 4;
-}
-
-.carousel-slide.revealed.pos-left-2 {
-  transform: translateX(-128%) scale(0.68);
-  opacity: 0.42;
-  z-index: 3;
-}
-
-.carousel-slide.revealed.pos-right-1 {
-  transform: translateX(72%) scale(0.82);
-  opacity: 0.7;
-  z-index: 4;
-}
-
-.carousel-slide.revealed.pos-right-2 {
-  transform: translateX(128%) scale(0.68);
-  opacity: 0.42;
-  z-index: 3;
-}
-
-.carousel-slide.pos-hidden-left,
-.carousel-slide.pos-hidden-right,
-.carousel-slide:not(.revealed) {
-  transform: translateX(0) scale(0.55);
-  opacity: 0;
-  z-index: 1;
+.carousel-slide.revealed {
+  border-color: rgba(255, 255, 255, 0.55);
 }
 
 @media (max-width: 520px) {

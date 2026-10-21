@@ -13,9 +13,14 @@
   ];
 
   const BASE = new URL('our_images/', window.location.href).href;
-  let currentIndex = 0;
+  const SPEED = 0.25;
+  const SPACING = 72;
+
+  let position = 0;
   let slides = [];
   let started = false;
+  let lastTime = 0;
+  let moving = false;
 
   function imageUrl(file) {
     return BASE + encodeURIComponent(file);
@@ -25,6 +30,35 @@
     IMAGE_FILES.forEach(function (file) {
       const img = new Image();
       img.src = imageUrl(file);
+    });
+  }
+
+  function wrapOffset(d, n) {
+    const half = n / 2;
+    while (d > half) d -= n;
+    while (d < -half) d += n;
+    return d;
+  }
+
+  function layoutSlides() {
+    const n = slides.length;
+    if (!n) return;
+
+    slides.forEach(function (slide, i) {
+      const d = wrapOffset(i - position, n);
+      const abs = Math.abs(d);
+      const revealed = slide.classList.contains('revealed');
+
+      let opacity = 0;
+      if (revealed) {
+        if (abs <= 2.35) opacity = Math.max(0.18, 0.92 - abs * 0.28);
+        else opacity = 0;
+      }
+
+      const scale = 1 - Math.min(abs, 2.6) * 0.16;
+      slide.style.transform = 'translateX(' + d * SPACING + '%) scale(' + scale + ')';
+      slide.style.opacity = String(opacity);
+      slide.style.zIndex = String(Math.round(30 - abs * 8));
     });
   }
 
@@ -55,41 +89,24 @@
     layoutSlides();
   }
 
-  function offsetForSlide(i) {
-    const n = slides.length;
-    let d = i - currentIndex;
-    if (d > n / 2) d -= n;
-    if (d < -n / 2) d += n;
-    return d;
-  }
+  function tick(now) {
+    if (!lastTime) lastTime = now;
+    const dt = Math.min(0.05, (now - lastTime) / 1000);
+    lastTime = now;
 
-  function layoutSlides() {
-    slides.forEach(function (slide, i) {
-      const d = offsetForSlide(i);
-      const isRevealed = slide.classList.contains('revealed');
-      slide.className = 'carousel-slide';
-      if (isRevealed) slide.classList.add('revealed');
+    if (moving) {
+      position += SPEED * dt;
+      if (position >= slides.length) position -= slides.length;
+    }
 
-      if (d === 0) slide.classList.add('pos-center');
-      else if (d === -1) slide.classList.add('pos-left-1');
-      else if (d === -2) slide.classList.add('pos-left-2');
-      else if (d === 1) slide.classList.add('pos-right-1');
-      else if (d === 2) slide.classList.add('pos-right-2');
-      else if (d < -2) slide.classList.add('pos-hidden-left');
-      else slide.classList.add('pos-hidden-right');
-    });
-  }
-
-  function nextSlide() {
-    currentIndex = (currentIndex + 1) % slides.length;
     layoutSlides();
+    window.requestAnimationFrame(tick);
   }
 
   function revealStaggered() {
     slides.forEach(function (slide, i) {
       window.setTimeout(function () {
         slide.classList.add('revealed');
-        layoutSlides();
       }, 350 + i * 420);
     });
   }
@@ -106,7 +123,8 @@
     if (heading) heading.classList.add('fade-out');
 
     revealStaggered();
-    window.setInterval(nextSlide, 3800);
+    moving = true;
+    window.requestAnimationFrame(tick);
   }
 
   function maybeStart() {
