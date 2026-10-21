@@ -5,8 +5,17 @@
 const fireworks = [];
 let gravity;
 
+function viewportSize() {
+  const view = window.visualViewport;
+  return {
+    w: Math.floor(view ? view.width : windowWidth),
+    h: Math.floor(view ? view.height : windowHeight),
+  };
+}
+
 function setup() {
-  const canvas = createCanvas(windowWidth, windowHeight);
+  const size = viewportSize();
+  const canvas = createCanvas(size.w, size.h);
   canvas.style('mix-blend-mode', 'screen');
   colorMode(HSB);
   gravity = createVector(0, 0.2);
@@ -16,7 +25,8 @@ function setup() {
 }
 
 function windowResized() {
-  resizeCanvas(windowWidth, windowHeight);
+  const size = viewportSize();
+  resizeCanvas(size.w, size.h);
   background(0);
 }
 

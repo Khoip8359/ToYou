@@ -14,7 +14,6 @@
 
   const BASE = new URL('our_images/', window.location.href).href;
   const SPEED = 0.25;
-  const SPACING = 72;
 
   let position = 0;
   let slides = [];
@@ -49,14 +48,15 @@
       const abs = Math.abs(d);
       const revealed = slide.classList.contains('revealed');
 
+      const spacing = window.innerWidth < 520 ? 56 : 72;
+      const maxVisible = window.innerWidth < 520 ? 1.85 : 2.35;
       let opacity = 0;
-      if (revealed) {
-        if (abs <= 2.35) opacity = Math.max(0.18, 0.92 - abs * 0.28);
-        else opacity = 0;
+      if (revealed && abs <= maxVisible) {
+        opacity = Math.max(0.18, 0.92 - abs * 0.32);
       }
 
       const scale = 1 - Math.min(abs, 2.6) * 0.16;
-      slide.style.transform = 'translateX(' + d * SPACING + '%) scale(' + scale + ')';
+      slide.style.transform = 'translateX(' + d * spacing + '%) scale(' + scale + ')';
       slide.style.opacity = String(opacity);
       slide.style.zIndex = String(Math.round(30 - abs * 8));
     });

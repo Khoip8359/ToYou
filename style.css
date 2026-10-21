@@ -1,32 +1,81 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  overflow-x: hidden;
+}
+
 body {
-  background-color: #9eb6ff;
+  font-family: arial, sans-serif;
+  margin: 0;
+  min-height: 100vh;
+  min-height: 100dvh;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   justify-content: center;
-  font-family: arial;
-  margin: auto;
+  padding: 24px 16px calc(32px + env(safe-area-inset-bottom));
+  background-color: #f7c6dc;
+  background-image:
+    radial-gradient(circle at 12% 18%, rgba(255, 255, 255, 0.7) 0 2px, transparent 3px),
+    radial-gradient(circle at 78% 22%, rgba(255, 255, 255, 0.45) 0 1.5px, transparent 3px),
+    radial-gradient(circle at 32% 78%, rgba(255, 255, 255, 0.4) 0 2px, transparent 3px),
+    radial-gradient(circle at 88% 70%, rgba(255, 255, 255, 0.55) 0 1.5px, transparent 3px),
+    radial-gradient(ellipse at top, rgba(255, 255, 255, 0.35), transparent 55%),
+    linear-gradient(165deg, #ffe4f1 0%, #f7c6dc 38%, #d9c4ff 72%, #b9d8ff 100%);
+  background-attachment: scroll;
 }
 
-img {
-  width: 30%;
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-
-h1 {
-  font-size: 300%;
+.page {
+  width: min(920px, 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   text-align: center;
 }
+
+img,
+#cake {
+  width: min(72vw, 320px);
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+}
+
+h1 {
+  font-size: clamp(1.35rem, 6vw, 2.8rem);
+  line-height: 1.3;
+  text-align: center;
+  color: #4a2a4f;
+  text-shadow: 0 2px 16px rgba(255, 255, 255, 0.7);
+  margin: 0 0 20px;
+  padding: 0 4px;
+}
+
 body#a {
   align-items: center;
 }
 
+.button {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
 
 #button {
   display: flex;
-  width: 30%;
-  padding: 15px 25px;
-  font-size: 24px;
+  align-items: center;
+  justify-content: center;
+  width: min(80vw, 280px);
+  min-height: 48px;
+  padding: 12px 20px;
+  font-size: clamp(1rem, 4vw, 1.4rem);
   cursor: pointer;
   text-align: center;
   text-decoration: none;
@@ -36,8 +85,8 @@ body#a {
   border: none;
   border-radius: 15px;
   box-shadow: 0 9px #999;
-  margin: auto;
-  margin-top: 30px;
+  margin: 24px auto 0;
+  touch-action: manipulation;
 }
 
 #button:hover {background-color: #3e8e41}
@@ -49,7 +98,14 @@ body#a {
 }
 
 h1.made {
-  font-size: 200%;
+  font-size: clamp(1.1rem, 4vw, 2rem);
   margin-bottom: 30px;
   color: #9eb6ff;
+}
+
+@media (min-width: 768px) {
+  img,
+  #cake {
+    width: min(36vw, 360px);
+  }
 }
